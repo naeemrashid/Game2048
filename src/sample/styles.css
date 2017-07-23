@@ -13,3 +13,24 @@
 -fx-pref-height: 200px;
 -fx-pref-width: 200px;
 }
+.color2{
+-fx-background-color: #C1FF33;
+}
+.color4{
+-fx-background-color: #FFA500;
+}
+.color8{
+-fx-background-color : #FF8557;
+}
+.color16{
+-fx-background-color: #7057FF;
+}
+.color32{
+-fx-background-color: #F1FC46;
+}
+.color64{
+-fx-background-color: #FF6D8A;
+}
+.color128{
+-fx-background-color: #93FF6D;
+}

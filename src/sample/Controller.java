@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable{
@@ -20,9 +21,11 @@ public class Controller implements Initializable{
     private GridPane gridPane;
 
     public void initializePane(){
+//        Random r = new Random();
         for(int i=0;i<gridPane.getRowConstraints().size();i++){
             for(int j=0;j<gridPane.getColumnConstraints().size();j++) {
                 JFXButton button = new JFXButton();
+//                button.setStyle("-fx-background-color : rgb("+r.nextInt(255)+","+r.nextInt(255)+","+r.nextInt(255)+")");
                 gridPane.add(button,i,j);
 
             }

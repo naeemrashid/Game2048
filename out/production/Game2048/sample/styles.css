@@ -13,3 +13,24 @@
 -fx-pref-height: 200px;
 -fx-pref-width: 200px;
 }
+.colorGreen{
+-fx-background-color: #C1FF33;
+}
+.colorOrange{
+-fx-background-color: #FFA500;
+}
+.colorRed{
+-fx-background-color : #FF8557;
+}
+.colorPurple{
+-fx-background-color: #7057FF;
+}
+.colorYellow{
+-fx-background-color: #F1FC46;
+}
+.colorPink{
+-fx-background-color: #FF6D8A;
+}
+.colorLightGreen{
+-fx-background-color: #93FF6D;
+}
