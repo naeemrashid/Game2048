@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'NotoColorEmoji';
+    src: url('../resources/fonts/NotoColorEmoji.ttf') format('truetype');
+}
+.root{
+-fx-background-color: #ffff;
+}
+.button{
+-fx-font-family:"verdana";
+-fx-font-size: 20px;
+-fx-font-weight: bold;
+-fx-background-color: #C1FF33;
+-fx-pref-height: 200px;
+-fx-pref-width: 200px;
+}
