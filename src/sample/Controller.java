@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.sql.Array;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -26,6 +27,7 @@ public class Controller implements Initializable{
             for(int j=0;j<gridPane.getColumnConstraints().size();j++) {
                 JFXButton button = new JFXButton();
 //                button.setStyle("-fx-background-color : rgb("+r.nextInt(255)+","+r.nextInt(255)+","+r.nextInt(255)+")");
+                button.getStyleClass().add("color8");
                 gridPane.add(button,i,j);
 
             }
