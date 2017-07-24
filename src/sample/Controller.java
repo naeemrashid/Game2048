@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,7 +27,7 @@ public class Controller implements Initializable{
     private GridPane gridPane;
     private int colSize;
     private int rowSize;
-
+    private Node[][] list = new Node[16][2];
     public void initializePane(){
         Random r = new Random();
         for(int i=0;i<rowSize;i++){
@@ -39,13 +40,17 @@ public class Controller implements Initializable{
             }
 
         }
-        Button button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+//        Button button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+//        button.setText("2");
+//        button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+//        button.setText("2");
+        Button button=(Button)getNodeFromGridPane(gridPane,2,2);
         button.setText("2");
-        button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+        button=(Button)getNodeFromGridPane(gridPane,3,2);
         button.setText("2");
 
     }
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+    public Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
@@ -57,37 +62,51 @@ public class Controller implements Initializable{
         return ThreadLocalRandom.current().nextInt(0,  rowSize);
     }
     public void moveLeft(){
-        for(int row=0;row<rowSize;row++){
-            for(int col=0;col<colSize;col++){
+        int index=0;
+        for(int col=1;col<colSize;col++){
+            for(int row=0;row<rowSize;row++){
                 Node node = getNodeFromGridPane(gridPane,col,row);
-                Button nodeBtn =(Button)node;
                 int colBack = col-1;
-                if (colBack == -1){
-                    colBack=colSize-1;
-                }
-//                System.out.println("column: "+colBack+" row: "+row);
-                Button next =(Button) getNodeFromGridPane(gridPane,colBack,row);
-               if (next!=null && next.getText()!=""){
-                   System.out.println("hell");
-
-               }else{
-                   System.out.println("need space man");
-               }
-                gridPane.getChildren().remove(node);
+                Node next = getNodeFromGridPane(gridPane,colBack,row);
+                node.getStyleClass().clear();
+                node.getStyleClass().add("button");
                 if (((Button) node).getText()!=""){
-                    node.getStyleClass().add("color"+((Button) node).getText());
+                    list[index][0]=node;
+                    list[index][1]=next;
+                    index++;
                 }
-                gridPane.add(node,colBack,row);
-
-
             }
+            move();
         }
 
+    }
+    public void move(){
+        for (int index=0;index<list.length;index++){
+            if (list[index][0]==null){
+                break;
+            }else {
+                Node node=list[index][0];
+                Node next=list[index][1];
+//                next.getStyleClass().removeAll("color2");
+                if (((Button)next).getText()==""){
+                    next.getStyleClass().add("color"+((Button) node).getText());
+                    ((Button)next).setText(((Button) node).getText());
+                    ((Button) node).setText("");
+                }else if(((Button)next).getText().equals(((Button)node).getText())) {
+                    int num=Integer.parseInt(((Button) node).getText());
+                    ((Button)next).setText(""+num*2);
+                    ((Button) node).setText("");
+                    node.getStyleClass().clear();
+                    node.getStyleClass().add("button");
+                }
+            }
+        }
     }
     public void handleEvent(KeyEvent event){
         if(event.getCode().equals(KeyCode.LEFT)){
 //            System.out.println("Left Arrow");
             moveLeft();
+//            testing();
         }else if(event.getCode().equals(KeyCode.UP)){
             System.out.println("up Arrow");
         }else if(event.getCode().equals(KeyCode.RIGHT)){
