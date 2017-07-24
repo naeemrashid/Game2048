@@ -33,8 +33,6 @@ public class Controller implements Initializable{
         for(int i=0;i<rowSize;i++){
             for(int j=0;j<colSize;j++) {
                 JFXButton button = new JFXButton();
-//                button.setStyle("-fx-background-color : rgb("+r.nextInt(255)+","+r.nextInt(255)+","+r.nextInt(255)+")");
-//                button.getStyleClass().add("color4");
                 gridPane.add(button,j,i);
 
             }
@@ -47,6 +45,10 @@ public class Controller implements Initializable{
         Button button=(Button)getNodeFromGridPane(gridPane,2,2);
         button.setText("2");
         button=(Button)getNodeFromGridPane(gridPane,3,2);
+        button.setText("2");
+        button=(Button)getNodeFromGridPane(gridPane,1,2);
+        button.setText("2");
+        button=(Button)getNodeFromGridPane(gridPane,0,2);
         button.setText("2");
 
     }
@@ -68,17 +70,79 @@ public class Controller implements Initializable{
                 Node node = getNodeFromGridPane(gridPane,col,row);
                 int colBack = col-1;
                 Node next = getNodeFromGridPane(gridPane,colBack,row);
-                node.getStyleClass().clear();
-                node.getStyleClass().add("button");
                 if (((Button) node).getText()!=""){
                     list[index][0]=node;
                     list[index][1]=next;
                     index++;
                 }
             }
-            move();
-        }
 
+        }
+        move();
+
+    }
+    public void moveRight(){
+        int index=0;
+        for(int col=colSize-2;col>=0;col--){
+            for(int row=0;row<rowSize;row++){
+                Node node = getNodeFromGridPane(gridPane,col,row);
+                int colBack = col+1;
+                Node next = getNodeFromGridPane(gridPane,colBack,row);
+                if (((Button) node).getText()!=""){
+                    list[index][0]=node;
+                    list[index][1]=next;
+                    index++;
+                }
+            }
+
+        }
+        move();
+
+    }
+    public void moveUp(){
+        int index=0;
+        for(int row=1;row<rowSize;row++){
+            for(int col=0;col<colSize;col++){
+                Node node = getNodeFromGridPane(gridPane,col,row);
+                int rowBack = row-1;
+                Node next = getNodeFromGridPane(gridPane,col,rowBack);
+                if (((Button) node).getText()!=""){
+                    list[index][0]=node;
+                    list[index][1]=next;
+                    index++;
+                }
+            }
+
+        }
+        move();
+
+    }
+    public void moveDown(){
+        int index=0;
+        for(int row=rowSize-2;row>=0;row--){
+            for(int col=0;col<colSize;col++){
+                Node node = getNodeFromGridPane(gridPane,col,row);
+                int rowBack = row+1;
+                Node next = getNodeFromGridPane(gridPane,col,rowBack);
+                if (((Button) node).getText()!=""){
+                    list[index][0]=node;
+                    list[index][1]=next;
+                    index++;
+                }
+            }
+
+        }
+        move();
+
+    }
+
+    public void color(){
+        for (Node node:gridPane.getChildren()){
+            node.getStyleClass().clear();
+            node.getStyleClass().add("button");
+            if (((Button)node).getText()!="")
+            node.getStyleClass().add("color"+((Button) node).getText());
+        }
     }
     public void move(){
         for (int index=0;index<list.length;index++){
@@ -87,33 +151,27 @@ public class Controller implements Initializable{
             }else {
                 Node node=list[index][0];
                 Node next=list[index][1];
-//                next.getStyleClass().removeAll("color2");
                 if (((Button)next).getText()==""){
-                    next.getStyleClass().add("color"+((Button) node).getText());
                     ((Button)next).setText(((Button) node).getText());
                     ((Button) node).setText("");
                 }else if(((Button)next).getText().equals(((Button)node).getText())) {
                     int num=Integer.parseInt(((Button) node).getText());
                     ((Button)next).setText(""+num*2);
-                    next.getStyleClass().add("color"+((Button) next).getText());
                     ((Button) node).setText("");
-                    node.getStyleClass().clear();
-                    node.getStyleClass().add("button");
                 }
             }
         }
+        color();
     }
     public void handleEvent(KeyEvent event){
         if(event.getCode().equals(KeyCode.LEFT)){
-//            System.out.println("Left Arrow");
             moveLeft();
-//            testing();
         }else if(event.getCode().equals(KeyCode.UP)){
-            System.out.println("up Arrow");
+            moveUp();
         }else if(event.getCode().equals(KeyCode.RIGHT)){
-            System.out.println("right Arrow");
+            moveRight();
         }else if (event.getCode().equals(KeyCode.DOWN)){
-            System.out.println("down Arrow");
+            moveDown();
         }
     }
     @Override
