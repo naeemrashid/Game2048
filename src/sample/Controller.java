@@ -4,13 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Popup;
 
+import java.awt.*;
 import java.net.URL;
 import java.sql.Array;
 import java.util.ArrayList;
@@ -38,18 +43,45 @@ public class Controller implements Initializable{
             }
 
         }
-//        Button button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+        Button button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+        button.setText("2");
+        button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+        button.setText("2");
+//        Button button=(Button)getNodeFromGridPane(gridPane,2,2);
 //        button.setText("2");
-//        button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
+//        button=(Button)getNodeFromGridPane(gridPane,3,2);
 //        button.setText("2");
-        Button button=(Button)getNodeFromGridPane(gridPane,2,2);
-        button.setText("2");
-        button=(Button)getNodeFromGridPane(gridPane,3,2);
-        button.setText("2");
-        button=(Button)getNodeFromGridPane(gridPane,1,2);
-        button.setText("2");
-        button=(Button)getNodeFromGridPane(gridPane,0,2);
-        button.setText("2");
+//        button=(Button)getNodeFromGridPane(gridPane,1,2);
+//        button.setText("2");
+//        button=(Button)getNodeFromGridPane(gridPane,0,2);
+//        button.setText("2");
+
+
+    }
+    public void rollDice(){
+        if (!checkSpace()){
+            System.out.println("No Space ..Game Over !!!");
+            return;
+        }
+        while (true){
+            Node node=getNodeFromGridPane(gridPane,getRandom(),getRandom());
+            if (((Button)node).getText()==""){
+                ((Button)node).setText("2");
+                break;
+            }
+        }
+
+//
+
+    }
+
+    public  boolean checkSpace(){
+        for (Node node:gridPane.getChildren()) {
+            if(((Button)node).getText()==""){
+                return true;
+            }
+        }
+        return false;
 
     }
     public Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
@@ -165,17 +197,30 @@ public class Controller implements Initializable{
     }
     public void handleEvent(KeyEvent event){
         if(event.getCode().equals(KeyCode.LEFT)){
+            rollDice();
             moveLeft();
         }else if(event.getCode().equals(KeyCode.UP)){
+            rollDice();
             moveUp();
         }else if(event.getCode().equals(KeyCode.RIGHT)){
+            rollDice();
             moveRight();
         }else if (event.getCode().equals(KeyCode.DOWN)){
+            rollDice();
             moveDown();
         }
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        HBox box = new HBox();
+        box.setSpacing(30.0);
+        JFXButton hbtn = new JFXButton("Restart");
+        TextField score = new TextField();
+        score.setEditable(false);
+        hbtn.getStyleClass().add("normal");
+        box.getChildren().addAll(hbtn,score);
+        borderPane.setTop(box);
+
         setColSize(gridPane.getColumnConstraints().size());
         setRowSize(gridPane.getRowConstraints().size());
         gridPane.hgapProperty().setValue(10);
