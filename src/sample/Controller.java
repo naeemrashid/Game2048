@@ -95,6 +95,7 @@ public class Controller implements Initializable{
                 }else if(((Button)next).getText().equals(((Button)node).getText())) {
                     int num=Integer.parseInt(((Button) node).getText());
                     ((Button)next).setText(""+num*2);
+                    next.getStyleClass().add("color"+((Button) next).getText());
                     ((Button) node).setText("");
                     node.getStyleClass().clear();
                     node.getStyleClass().add("button");
