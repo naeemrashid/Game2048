@@ -13,15 +13,25 @@
 -fx-pref-height: 200px;
 -fx-pref-width: 200px;
 }
-.normal{
--fx-font-family:"verdana";
+#normal{
+-fx-font-family: "verdana";
+-fx-background-color:#9C27B0;
+-fx-text-fill: #ffff;
 -fx-font-size: 10px;
 -fx-font-weight: bold;
--fx-background-color: #82E0AA  ;
 -fx-pref-height: 30px;
 -fx-pref-width: 100px;
--fx-margin: 20px;
-
+}
+#score{
+-fx-font-family:"verdana";
+-fx-background-color:#ffff;
+-fx-text-fill: #9E9E9E;
+-fx-font-size: 12px;
+-fx-font-weight: bold;
+-fx-pref-height: 35px;
+-fx-pref-width: 150px;
+-fx-border-width: 2;
+-fx-border-color: #F2F3F4;
 }
 .color2{ -fx-background-color: #C1FF33;}
 .color4{ -fx-background-color: #FFA500;}

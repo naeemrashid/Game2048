@@ -1,5 +1,6 @@
 package sample;
 import com.jfoenix.controls.JFXButton;
+import com.sun.javafx.font.freetype.HBGlyphLayout;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,8 +32,16 @@ public class Controller implements Initializable{
 
     @FXML
     private GridPane gridPane;
+    @FXML
+    private HBox box;
+    @FXML
+    private JFXButton restart;
+    @FXML
+    private Label score;
+
     private int colSize;
     private int rowSize;
+    private static int scoreNum=0;
     private Node[][] list = new Node[16][2];
     public void initializePane(){
         Random r = new Random();
@@ -47,20 +57,9 @@ public class Controller implements Initializable{
         button.setText("2");
         button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
         button.setText("2");
-//        Button button=(Button)getNodeFromGridPane(gridPane,2,2);
-//        button.setText("2");
-//        button=(Button)getNodeFromGridPane(gridPane,3,2);
-//        button.setText("2");
-//        button=(Button)getNodeFromGridPane(gridPane,1,2);
-//        button.setText("2");
-//        button=(Button)getNodeFromGridPane(gridPane,0,2);
-//        button.setText("2");
-
-
     }
     public void rollDice(){
         if (!checkSpace()){
-            System.out.println("No Space ..Game Over !!!");
             return;
         }
         while (true){
@@ -189,6 +188,8 @@ public class Controller implements Initializable{
                 }else if(((Button)next).getText().equals(((Button)node).getText())) {
                     int num=Integer.parseInt(((Button) node).getText());
                     ((Button)next).setText(""+num*2);
+                    scoreNum+=num;
+                    score.setText("Score: "+scoreNum);
                     ((Button) node).setText("");
                 }
             }
@@ -210,22 +211,23 @@ public class Controller implements Initializable{
             moveDown();
         }
     }
+    public void handleEvent(MouseEvent event){
+        gridPane.getChildren().removeAll();
+        initializePane();
+        scoreNum=0;
+        score.setText("Score: "+scoreNum);
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        HBox box = new HBox();
-        box.setSpacing(30.0);
-        JFXButton hbtn = new JFXButton("Restart");
-        TextField score = new TextField();
-        score.setEditable(false);
-        hbtn.getStyleClass().add("normal");
-        box.getChildren().addAll(hbtn,score);
-        borderPane.setTop(box);
-
+        restart.setId("normal");
+        score.setId("score");
+        box.setSpacing(200);
         setColSize(gridPane.getColumnConstraints().size());
         setRowSize(gridPane.getRowConstraints().size());
         gridPane.hgapProperty().setValue(10);
         gridPane.vgapProperty().setValue(10);
         this.initializePane();
+        restart.addEventHandler(MouseEvent.MOUSE_CLICKED ,event -> handleEvent(event));
         gridPane.addEventHandler(KeyEvent.KEY_PRESSED, event -> handleEvent(event));
 
 
