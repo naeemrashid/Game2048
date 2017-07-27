@@ -1,28 +1,27 @@
 package sample;
 import com.jfoenix.controls.JFXButton;
-import com.sun.javafx.font.freetype.HBGlyphLayout;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Popup;
 
-import java.awt.*;
+import java.io.File;
 import java.net.URL;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Controller implements Initializable{
@@ -43,11 +42,18 @@ public class Controller implements Initializable{
     private int rowSize;
     private static int scoreNum=0;
     private Node[][] list = new Node[16][2];
+    private ArrayList<String> smileys = new ArrayList<>();
+
+
     public void initializePane(){
+//        Image image = new Image("resources/images/001-smile.png");
+//        button.setGraphic(new ImageView(image));
+//        button.setAlignment(Pos.TOP_LEFT);
         Random r = new Random();
         for(int i=0;i<rowSize;i++){
             for(int j=0;j<colSize;j++) {
                 JFXButton button = new JFXButton();
+
                 gridPane.add(button,j,i);
 
             }
@@ -57,6 +63,7 @@ public class Controller implements Initializable{
         button.setText("2");
         button=(Button)getNodeFromGridPane(gridPane,getRandom(),getRandom());
         button.setText("2");
+        color();
     }
     public void rollDice(){
         if (!checkSpace()){
@@ -171,8 +178,10 @@ public class Controller implements Initializable{
         for (Node node:gridPane.getChildren()){
             node.getStyleClass().clear();
             node.getStyleClass().add("button");
-            if (((Button)node).getText()!="")
-            node.getStyleClass().add("color"+((Button) node).getText());
+            if (((Button)node).getText()!="") {
+                node.getStyleClass().add("color" + ((Button) node).getText());
+            }
+
         }
     }
     public void move(){
@@ -189,14 +198,19 @@ public class Controller implements Initializable{
                     int num=Integer.parseInt(((Button) node).getText());
                     ((Button)next).setText(""+num*2);
                     scoreNum+=num;
-                    score.setText("Score: "+scoreNum);
+                    score.setText(" Score: "+scoreNum);
                     ((Button) node).setText("");
                 }
             }
         }
         color();
     }
+
     public void handleEvent(KeyEvent event){
+        if(scoreNum>=2048){
+            score.setText(" You wins !");
+            return;
+        }
         if(event.getCode().equals(KeyCode.LEFT)){
             rollDice();
             moveLeft();
@@ -212,10 +226,8 @@ public class Controller implements Initializable{
         }
     }
     public void handleEvent(MouseEvent event){
-        gridPane.getChildren().removeAll();
-        initializePane();
-        scoreNum=0;
-        score.setText("Score: "+scoreNum);
+//       FXMLLoader.load(getClass().getResource("sample.fxml");
+
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -226,11 +238,9 @@ public class Controller implements Initializable{
         setRowSize(gridPane.getRowConstraints().size());
         gridPane.hgapProperty().setValue(10);
         gridPane.vgapProperty().setValue(10);
-        this.initializePane();
+        initializePane();
         restart.addEventHandler(MouseEvent.MOUSE_CLICKED ,event -> handleEvent(event));
         gridPane.addEventHandler(KeyEvent.KEY_PRESSED, event -> handleEvent(event));
-
-
 
     }
     public void setColSize(int colSize) {
