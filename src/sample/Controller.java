@@ -226,8 +226,9 @@ public class Controller implements Initializable{
         }
     }
     public void handleEvent(MouseEvent event){
-//       FXMLLoader.load(getClass().getResource("sample.fxml");
-
+        gridPane.getChildren().remove(0,gridPane.getChildren().size());
+        initializePane();
+        scoreNum=0;
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
