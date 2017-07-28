@@ -50,7 +50,8 @@ public class Controller implements Initializable{
     private static int scoreNum=0;
     private Node[][] list = new Node[16][2];
     private ArrayList<String> smileys = new ArrayList<>();
-
+    private StackPane stackPane;
+    private boolean dialogOpened = false;
 
     public void initializePane(){
 //        Image image = new Image("resources/images/001-smile.png");
@@ -203,7 +204,7 @@ public class Controller implements Initializable{
                     ((Button) node).setText("");
                 }else if(((Button)next).getText().equals(((Button)node).getText())) {
                     int num=Integer.parseInt(((Button) node).getText());
-                    ((Button)next).setText(""+num*2);
+                    ((Button)next).setText(""+num*100);
                     scoreNum+=num;
                     score.setText(" Score: "+scoreNum);
                     ((Button) node).setText("");
@@ -214,8 +215,12 @@ public class Controller implements Initializable{
     }
 
     public void handleEvent(KeyEvent event){
-        if(scoreNum>=2048){
-            score.setText(" You wins !");
+        if(scoreNum==2048 ){
+            if(!dialogOpened) {
+                showDialog("You Win !!", "Congratulation you have won the Game. would you like\n" +
+                        "to play again or exit the Game.", stackPane);
+                dialogOpened = true;
+            }
             return;
         }
         if(event.getCode().equals(KeyCode.LEFT)){
@@ -233,37 +238,56 @@ public class Controller implements Initializable{
         }
     }
     public void handleEvent(MouseEvent event){
-//        gridPane.getChildren().remove(0,gridPane.getChildren().size());
-//        initializePane();
-//        scoreNum=0;
-        JFXButton restart = new JFXButton("Restart");
-        restart.setId("normal");
-        JFXButton cancel = new JFXButton("Cancel");
-        cancel.setId("normal");
-
-        JFXDialogLayout content = new JFXDialogLayout();
-        content.setHeading(new Text("Game Over"));
-        content.setBody(new Text("You do not have any move left and your score is below than 2048\n"+
-                "If you want to try again click the restart button. or click cancel\n" +
-                " button"+
-                " to end the Game.\n"));
-        content.setActions(restart,cancel);
-        StackPane pane = new StackPane();
-        pane.getChildren().add(gridPane);
-        borderPane.setCenter(pane);
-
-        JFXDialog dialog= new JFXDialog(pane,content, JFXDialog.DialogTransition.CENTER);
-        dialog.show();
-
-        cancel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-                System.exit(0);
-
-            }
-        });
+        start();
     }
+    public boolean gameOver(){
+
+        return false;
+    }
+    public void start(){
+        gridPane.getChildren().remove(0,gridPane.getChildren().size());
+        initializePane();
+        scoreNum=0;
+        score.setText(" Score: "+scoreNum);
+
+    }
+
+
+    /*
+    * */
+
+
+public void showDialog(String heading,String body,StackPane stackPane){
+    JFXButton restart = new JFXButton("Restart");
+    restart.setId("normal");
+    JFXButton cancel = new JFXButton("Cancel");
+    cancel.setId("normal");
+
+    JFXDialogLayout content = new JFXDialogLayout();
+    content.setHeading(new Text(heading));
+    content.setBody(new Text(body));
+    content.setActions(restart,cancel);
+
+    JFXDialog dialog= new JFXDialog(stackPane,content, JFXDialog.DialogTransition.CENTER);
+    dialog.show();
+    cancel.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            dialog.close();
+            System.exit(0);
+
+        }
+    });
+    restart.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            dialog.close();
+            dialogOpened=false;
+            start();
+        }
+    });
+}
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         restart.setId("normal");
@@ -273,7 +297,10 @@ public class Controller implements Initializable{
         setRowSize(gridPane.getRowConstraints().size());
         gridPane.hgapProperty().setValue(10);
         gridPane.vgapProperty().setValue(10);
-        initializePane();
+        stackPane = new StackPane();
+        stackPane.getChildren().add(gridPane);
+        borderPane.setCenter(stackPane);
+        start();
         restart.addEventHandler(MouseEvent.MOUSE_CLICKED ,event -> handleEvent(event));
         gridPane.addEventHandler(KeyEvent.KEY_PRESSED, event -> handleEvent(event));
 
