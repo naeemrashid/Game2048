@@ -1,5 +1,10 @@
 package sample;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +20,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.net.URL;
@@ -226,9 +233,36 @@ public class Controller implements Initializable{
         }
     }
     public void handleEvent(MouseEvent event){
-        gridPane.getChildren().remove(0,gridPane.getChildren().size());
-        initializePane();
-        scoreNum=0;
+//        gridPane.getChildren().remove(0,gridPane.getChildren().size());
+//        initializePane();
+//        scoreNum=0;
+        JFXButton restart = new JFXButton("Restart");
+        restart.setId("normal");
+        JFXButton cancel = new JFXButton("Cancel");
+        cancel.setId("normal");
+
+        JFXDialogLayout content = new JFXDialogLayout();
+        content.setHeading(new Text("Game Over"));
+        content.setBody(new Text("You do not have any move left and your score is below than 2048\n"+
+                "If you want to try again click the restart button. or click cancel\n" +
+                " button"+
+                " to end the Game.\n"));
+        content.setActions(restart,cancel);
+        StackPane pane = new StackPane();
+        pane.getChildren().add(gridPane);
+        borderPane.setCenter(pane);
+
+        JFXDialog dialog= new JFXDialog(pane,content, JFXDialog.DialogTransition.CENTER);
+        dialog.show();
+
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+                System.exit(0);
+
+            }
+        });
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
