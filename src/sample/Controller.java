@@ -84,9 +84,6 @@ public class Controller implements Initializable{
                 break;
             }
         }
-
-//
-
     }
 
     public  boolean checkSpace(){
@@ -204,7 +201,7 @@ public class Controller implements Initializable{
                     ((Button) node).setText("");
                 }else if(((Button)next).getText().equals(((Button)node).getText())) {
                     int num=Integer.parseInt(((Button) node).getText());
-                    ((Button)next).setText(""+num*100);
+                    ((Button)next).setText(""+num*2);
                     scoreNum+=num;
                     score.setText(" Score: "+scoreNum);
                     ((Button) node).setText("");
@@ -215,7 +212,7 @@ public class Controller implements Initializable{
     }
 
     public void handleEvent(KeyEvent event){
-        if(scoreNum==2048 ){
+        if(scoreNum==2048 || gameOver()){
             if(!dialogOpened) {
                 showDialog("You Win !!", "Congratulation you have won the Game. would you like\n" +
                         "to play again or exit the Game.", stackPane);
@@ -240,10 +237,7 @@ public class Controller implements Initializable{
     public void handleEvent(MouseEvent event){
         start();
     }
-    public boolean gameOver(){
 
-        return false;
-    }
     public void start(){
         gridPane.getChildren().remove(0,gridPane.getChildren().size());
         initializePane();
@@ -286,6 +280,17 @@ public void showDialog(String heading,String body,StackPane stackPane){
             start();
         }
     });
+}
+public boolean gameOver(){
+    if(!checkSpace()) {
+        if (!dialogOpened){
+            showDialog("Game Over","Would you like to try again !!!",stackPane);
+            dialogOpened=true;
+        }
+
+        return true;
+    }
+    return false;
 }
 
     @Override
